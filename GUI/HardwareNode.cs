@@ -12,19 +12,20 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using OpenHardwareMonitor.Hardware;
+using OpenHardwareMonitor.Utilities;
 
 namespace OpenHardwareMonitor.GUI {
   public class HardwareNode : Node {
 
     private PersistentSettings settings;
     private UnitManager unitManager;
-    private SensorTextManager sensorTextManager;
+    private ISensorTextManager sensorTextManager;
     private IHardware hardware;
 
     private List<TypeNode> typeNodes = new List<TypeNode>();
 
     public HardwareNode(IHardware hardware, PersistentSettings settings, 
-      UnitManager unitManager, SensorTextManager sensorTextManager) : base() 
+      UnitManager unitManager, ISensorTextManager sensorTextManager) : base() 
     {
       this.settings = settings;
       this.unitManager = unitManager;

@@ -1,11 +1,12 @@
-﻿using OpenHardwareMonitor.Hardware;
+﻿using OpenHardwareMonitor.GUI;
+using OpenHardwareMonitor.Hardware;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace OpenHardwareMonitor.GUI
+namespace OpenHardwareMonitor.Utilities
 {
-    public class SensorTextManager
+    public class SensorTextManager : ISensorTextManager
     {
         private UnitManager unitManager;
 
@@ -39,7 +40,7 @@ namespace OpenHardwareMonitor.GUI
                 return "-";
         }
 
-        public string GetFormat(ISensor sensor)
+        private string GetFormat(ISensor sensor)
         {
             string format = string.Empty;
 

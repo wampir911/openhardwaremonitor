@@ -20,14 +20,14 @@ namespace OpenHardwareMonitor.GUI {
     private ISensor sensor;
     private PersistentSettings settings;
     private UnitManager unitManager;
-    private SensorTextManager sensorTextManager;
+    private ISensorTextManager sensorTextManager;
     private bool plot = false;
     private Color? penColor = null;
 
     
 
     public SensorNode(ISensor sensor, PersistentSettings settings, 
-      UnitManager unitManager, SensorTextManager sensorTextManager) : base() {      
+      UnitManager unitManager, ISensorTextManager sensorTextManager) : base() {      
       this.sensor = sensor;
       this.settings = settings;
       this.unitManager = unitManager;
