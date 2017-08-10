@@ -27,10 +27,11 @@ namespace OpenHardwareMonitor.Hardware.Nvidia {
       report.AppendLine();
 
       string version;
-      if (NVAPI.NvAPI_GetInterfaceVersionString(out version) == NvStatus.OK) {
-        report.Append("Version: ");
-        report.AppendLine(version);
-      }
+            if (NVAPI.NvAPI_GetInterfaceVersionString(out version) == NvStatus.OK)
+            {
+                report.Append("Version: ");
+                report.AppendLine(version);
+            }
 
       NvPhysicalGpuHandle[] handles = 
         new NvPhysicalGpuHandle[NVAPI.MAX_PHYSICAL_GPUS];

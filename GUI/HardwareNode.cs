@@ -18,15 +18,17 @@ namespace OpenHardwareMonitor.GUI {
 
     private PersistentSettings settings;
     private UnitManager unitManager;
+    private SensorTextManager sensorTextManager;
     private IHardware hardware;
 
     private List<TypeNode> typeNodes = new List<TypeNode>();
 
     public HardwareNode(IHardware hardware, PersistentSettings settings, 
-      UnitManager unitManager) : base() 
+      UnitManager unitManager, SensorTextManager sensorTextManager) : base() 
     {
       this.settings = settings;
       this.unitManager = unitManager;
+      this.sensorTextManager = sensorTextManager;
       this.hardware = hardware;
       this.Image = HardwareTypeImage.Instance.GetImage(hardware.HardwareType);
 
@@ -88,7 +90,7 @@ namespace OpenHardwareMonitor.GUI {
       while (i < node.Nodes.Count &&
         ((SensorNode)node.Nodes[i]).Sensor.Index < sensor.Index)
         i++;
-      SensorNode sensorNode = new SensorNode(sensor, settings, unitManager);
+      SensorNode sensorNode = new SensorNode(sensor, settings, unitManager, sensorTextManager);
       sensorNode.PlotSelectionChanged += SensorPlotSelectionChanged;
       node.Nodes.Insert(i, sensorNode);
     }

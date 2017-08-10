@@ -149,6 +149,12 @@ namespace OpenHardwareMonitor.Hardware {
       }
     }
 
+   public string DefaultName {
+            get {
+                return this.defaultName;
+            }
+        }
+
     public string Name {
       get { 
         return name; 

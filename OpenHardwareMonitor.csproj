@@ -66,6 +66,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
@@ -79,6 +80,13 @@
     <Compile Include="GUI\GadgetWindow.cs" />
     <Compile Include="GUI\Gadget.cs" />
     <Compile Include="GUI\HardwareTypeImage.cs" />
+    <Compile Include="GUI\NotificationManager.cs" />
+    <Compile Include="GUI\NotificationsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\NotificationsForm.Designer.cs">
+      <DependentUpon>NotificationsForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\NotifyIconAdv.cs" />
     <Compile Include="GUI\PlotPanel.cs">
       <SubType>UserControl</SubType>
@@ -110,6 +118,7 @@
     </Compile>
     <Compile Include="GUI\SensorGadget.cs" />
     <Compile Include="GUI\SensorNotifyIcon.cs" />
+    <Compile Include="GUI\SensorTextManager.cs" />
     <Compile Include="GUI\ShowDesktop.cs" />
     <Compile Include="GUI\SplitContainerAdv.cs">
       <SubType>Component</SubType>
@@ -156,6 +165,9 @@
     <EmbeddedResource Include="GUI\AboutBox.resx">
       <DependentUpon>AboutBox.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\NotificationsForm.resx">
+      <DependentUpon>NotificationsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\PortForm.resx">
       <DependentUpon>PortForm.cs</DependentUpon>

@@ -50,6 +50,7 @@ namespace OpenHardwareMonitor.Hardware {
     Identifier Identifier { get; }
 
     string Name { get; set; }
+    string DefaultName { get; }
     int Index { get; }
 
     bool IsDefaultHidden { get; }

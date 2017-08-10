@@ -23,12 +23,15 @@ using Aga.Controls.Tree.NodeControls;
 using OpenHardwareMonitor.Hardware;
 using OpenHardwareMonitor.WMI;
 using OpenHardwareMonitor.Utilities;
+using System.Linq;
+using System.Text;
 
 namespace OpenHardwareMonitor.GUI {
   public partial class MainForm : Form {
 
     private PersistentSettings settings;
     private UnitManager unitManager;
+    private SensorTextManager sensorTextManager;
     private Computer computer;
     private Node root;
     private TreeModel treeModel;
@@ -89,6 +92,7 @@ namespace OpenHardwareMonitor.GUI {
         Application.ExecutablePath, ".config"));
 
       this.unitManager = new UnitManager(settings);
+      this.sensorTextManager = new SensorTextManager(this.unitManager);
 
       // make sure the buffers used for double buffering are not disposed 
       // after each draw call
@@ -443,7 +447,7 @@ namespace OpenHardwareMonitor.GUI {
     
     private void SubHardwareAdded(IHardware hardware, Node node) {
       HardwareNode hardwareNode = 
-        new HardwareNode(hardware, settings, unitManager);
+        new HardwareNode(hardware, settings, unitManager, sensorTextManager);
       hardwareNode.PlotSelectionChanged += PlotSelectionChanged;
 
       InsertSorted(node.Nodes, hardwareNode);
@@ -773,7 +777,7 @@ namespace OpenHardwareMonitor.GUI {
       }
     }
 
-    private void saveReportMenuItem_Click(object sender, EventArgs e) {
+    private void saveReportMenuItem_Click(object sender, EventArgs e) {           
       string report = computer.GetReport();
       if (saveFileDialog.ShowDialog() == DialogResult.OK) {
         using (TextWriter w = new StreamWriter(saveFileDialog.FileName)) {
@@ -781,6 +785,29 @@ namespace OpenHardwareMonitor.GUI {
         }
       }
     }
+
+        private void Notify()
+        {
+            StringBuilder sb = new StringBuilder();
+            var GPUHardwares = computer.Hardware.ToList().Where(x => x.HardwareType == HardwareType.GpuNvidia || x.HardwareType == HardwareType.GpuAti);
+
+            foreach (var GPUHardware in GPUHardwares)
+            {                
+                sb.Append(GPUHardware.Name);
+                sb.AppendFormat(" - CORE : {0}", sensorTextManager.ValueToString(GPUHardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Clock && x.DefaultName == "GPU Core")));
+                sb.AppendFormat(" , Load : {0}", sensorTextManager.ValueToString(GPUHardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Load && x.DefaultName == "GPU Core")));
+                sb.AppendFormat(" TEMP : {0}", sensorTextManager.ValueToString(GPUHardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Temperature)));
+                sb.AppendFormat(" , FAN : {0} ({1})",
+                    sensorTextManager.ValueToString(GPUHardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Control)),
+                    sensorTextManager.ValueToString(GPUHardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Fan)));
+
+                sb.AppendFormat(" MEMORY : {0}", sensorTextManager.ValueToString(GPUHardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Clock && x.DefaultName == "GPU Memory")));
+               
+                sb.AppendLine();
+            }
+
+            var s = sb.ToString();
+        }
 
     private void SysTrayHideShow() {
       Visible = !Visible;
@@ -904,5 +931,12 @@ namespace OpenHardwareMonitor.GUI {
       get { return server; }
     }
 
-  }
+    private void menuItem7_Click(object sender, EventArgs e)
+    {
+            var notificationForm = new NotificationsForm(settings);
+            notificationForm.FormBorderStyle = FormBorderStyle.FixedSingle;
+            notificationForm.ShowDialog();
+    }
+
+    }
 }
