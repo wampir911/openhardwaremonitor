@@ -23,6 +23,7 @@ using Aga.Controls.Tree.NodeControls;
 using OpenHardwareMonitor.Hardware;
 using OpenHardwareMonitor.WMI;
 using OpenHardwareMonitor.Utilities;
+using OpenHardwareMonitor.Utilities.Notifier;
 
 namespace OpenHardwareMonitor.GUI {
   public partial class MainForm : Form {
@@ -71,6 +72,8 @@ namespace OpenHardwareMonitor.GUI {
     private UserRadioGroup loggingInterval;
     private Logger logger;
 
+    private EmailNotificationManager emailNotificationManager;
+
     private bool selectionDragging = false;
 
     public MainForm() {      
@@ -91,7 +94,7 @@ namespace OpenHardwareMonitor.GUI {
 
       this.unitManager = new UnitManager(settings);
       this.sensorTextManager = new SensorTextManager(this.unitManager);
-
+      
       // make sure the buffers used for double buffering are not disposed 
       // after each draw call
       BufferedGraphicsManager.Current.MaximumBuffer =
@@ -285,7 +288,11 @@ namespace OpenHardwareMonitor.GUI {
           server.StopHTTPListener();
       };
 
-      logSensors = new UserOption("logSensorsMenuItem", false, logSensorsMenuItem,
+        List<IChecker> checkers = new List<IChecker>() { new GPULoadChecker(this.settings, this.computer), new GPUTemperatureChecker(this.settings, this.computer) };
+        this.emailNotificationManager = new EmailNotificationManager(this.computer, this.sensorTextManager, this.settings, checkers);
+
+
+            logSensors = new UserOption("logSensorsMenuItem", false, logSensorsMenuItem,
         settings);
 
       loggingInterval = new UserRadioGroup("loggingInterval", 0,
@@ -574,6 +581,11 @@ namespace OpenHardwareMonitor.GUI {
 
       if (delayCount < 4)
         delayCount++;
+
+      if (this.emailNotificationManager.ChechIfNotificationShouldBeSend())
+      {
+          this.emailNotificationManager.SendReport();
+      }
     }
 
     private void SaveConfiguration() {

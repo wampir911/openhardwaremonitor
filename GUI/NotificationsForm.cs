@@ -1,5 +1,6 @@
 ﻿using OpenHardwareMonitor.Hardware;
 using OpenHardwareMonitor.Utilities;
+using OpenHardwareMonitor.Utilities.Notifier;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -45,20 +46,20 @@ namespace OpenHardwareMonitor.GUI
         private void NotificationsForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             settings.SetValue(EmailNotificationManager.EmailIdentifier.ToString(), notificationEmailTxtBox.Text);
-            settings.SetValue(EmailNotificationManager.GPULoadThresholdIdentifier.ToString(), GPULoadDDL.SelectedIndex);
-            settings.SetValue(EmailNotificationManager.GraterLessSignGPULoadIdentifier.ToString(), GPULoadDDL.SelectedIndex);
+            settings.SetValue(GPULoadChecker.ThresholdIdentifier.ToString(), GPULoadDDL.SelectedIndex);
+            settings.SetValue(GPULoadChecker.GraterLessSignIdentifier.ToString(), GPULoadDDL.SelectedIndex);
 
-            settings.SetValue(EmailNotificationManager.GPUTemperatureThresholdIdentifier.ToString(), GPUTemperatureNumUpDown.Value.ToString());            
-            settings.SetValue(EmailNotificationManager.GraterLessSignGPUTemperatureThresholdIdentifier.ToString(), GPUTemperatureDDL.SelectedIndex);
+            settings.SetValue(GPUTemperatureChecker.ThresholdIdentifier.ToString(), GPUTemperatureNumUpDown.Value.ToString());            
+            settings.SetValue(GPUTemperatureChecker.GraterLessSignIdentifier.ToString(), GPUTemperatureDDL.SelectedIndex);
         }
 
         private void NotificationsForm_Load(object sender, EventArgs e)
         {
             notificationEmailTxtBox.Text = settings.GetValue(EmailNotificationManager.EmailIdentifier.ToString(), string.Empty);
-            GPULoadNumUpDown.Value = Convert.ToInt32(settings.GetValue(EmailNotificationManager.GPULoadThresholdIdentifier.ToString(), 0));
-            GPUTemperatureNumUpDown.Value = Convert.ToInt32(settings.GetValue(EmailNotificationManager.GPUTemperatureThresholdIdentifier.ToString(), 0));
-            GPULoadDDL.SelectedIndex = Convert.ToInt32(settings.GetValue(EmailNotificationManager.GraterLessSignGPULoadIdentifier.ToString(), 0));
-            GPUTemperatureDDL.SelectedIndex = Convert.ToInt32(settings.GetValue(EmailNotificationManager.GraterLessSignGPUTemperatureThresholdIdentifier.ToString(), 0));
+            GPULoadNumUpDown.Value = Convert.ToDecimal(settings.GetValue(GPULoadChecker.ThresholdIdentifier.ToString(), 0));
+            GPULoadDDL.SelectedIndex = Convert.ToInt32(settings.GetValue(GPULoadChecker.GraterLessSignIdentifier.ToString(), 0));
+            GPUTemperatureNumUpDown.Value = Convert.ToDecimal(settings.GetValue(GPUTemperatureChecker.ThresholdIdentifier.ToString(), 0));           
+            GPUTemperatureDDL.SelectedIndex = Convert.ToInt32(settings.GetValue(GPUTemperatureChecker.GraterLessSignIdentifier.ToString(), 0));
 
             this.SetControlsBehavior();
         }        
