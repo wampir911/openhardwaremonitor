@@ -6,12 +6,12 @@ using System.Text;
 
 namespace OpenHardwareMonitor.Utilities.Notifier
 {
-    public class GPULoadChecker : CheckerBase, IChecker
+    public class MemoryUsageChecker : CheckerBase, IChecker
     {
         private PersistentSettings settings;
         private IComputer computer;
 
-        public GPULoadChecker(PersistentSettings settings, IComputer computer)
+        public MemoryUsageChecker(PersistentSettings settings, IComputer computer)
         {
             this.settings = settings;
             this.computer = computer;
@@ -21,7 +21,7 @@ namespace OpenHardwareMonitor.Utilities.Notifier
         {
             get
             {
-                return new Identifier("notification", "GpuLoadThreshold");
+                return new Identifier("notification", "MemoryUsageThreshold");
             }
         }
 
@@ -29,7 +29,7 @@ namespace OpenHardwareMonitor.Utilities.Notifier
         {
             get
             {
-                return new Identifier("notification", "graterLessSignGPULoad");
+                return new Identifier("notification", "graterLessSignMemoryUsage");
             }
         }
 
@@ -39,21 +39,21 @@ namespace OpenHardwareMonitor.Utilities.Notifier
         /// <returns>true if condition is positive for one of the gpu.</returns>
         public bool Check()
         {
-            foreach (var hardware in computer.Hardware.Where(x => x.HardwareType == HardwareType.GpuNvidia || x.HardwareType == HardwareType.GpuAti).ToList())
+            foreach (var hardware in computer.Hardware.Where(x => x.HardwareType == HardwareType.RAM).ToList())
             {
-                ISensor gpuLoadSensor = hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Load && x.DefaultName == "GPU Core");
-                if (gpuLoadSensor != null)
+                ISensor memoryUsageSensor = hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Load);
+                if (memoryUsageSensor != null)
                 {
-                    var graterLessSignGPULoad = settings.GetValue(GraterLessSignIdentifier.ToString(), 0);
-                    var gpuLoadThreshold = settings.GetValue(ThresholdIdentifier.ToString(), -1);
+                    var graterLessSignMemoryUsage = settings.GetValue(GraterLessSignIdentifier.ToString(), 0);
+                    var memoryUsageThreshold = settings.GetValue(ThresholdIdentifier.ToString(), -1);
 
-                    if (base.CheckValue(gpuLoadSensor.Value, graterLessSignGPULoad, gpuLoadThreshold))
+                    if (base.CheckValue(memoryUsageSensor.Value, graterLessSignMemoryUsage, memoryUsageThreshold))
                     {
                         return true;
                     }
                 }
             }
-
+            
             return false;
         }
     }

@@ -156,8 +156,6 @@ namespace OpenHardwareMonitor.GUI {
         wmiProvider = new WmiProvider(computer);
       }
 
-      logger = new Logger(computer);
-
       plotColorPalette = new Color[13];
       plotColorPalette[0] = Color.Blue;
       plotColorPalette[1] = Color.OrangeRed;
@@ -288,9 +286,17 @@ namespace OpenHardwareMonitor.GUI {
           server.StopHTTPListener();
       };
 
-        List<IChecker> checkers = new List<IChecker>() { new GPULoadChecker(this.settings, this.computer), new GPUTemperatureChecker(this.settings, this.computer) };
+        List<IChecker> checkers = new List<IChecker>() {
+            new GPULoadChecker(this.settings, this.computer),
+            new GPUTemperatureChecker(this.settings, this.computer),
+            new CPULoadChecker(this.settings, this.computer),
+            new CPUTemperatureChecker(this.settings, this.computer),
+            new MemoryUsageChecker(this.settings, this.computer)
+        };
+
         this.emailNotificationManager = new EmailNotificationManager(this.computer, this.sensorTextManager, this.settings, checkers);
 
+        logger = new Logger(computer);
 
             logSensors = new UserOption("logSensorsMenuItem", false, logSensorsMenuItem,
         settings);
@@ -582,10 +588,10 @@ namespace OpenHardwareMonitor.GUI {
       if (delayCount < 4)
         delayCount++;
 
-      if (this.emailNotificationManager.ChechIfNotificationShouldBeSend())
-      {
-          this.emailNotificationManager.SendReport();
-      }
+    if (this.emailNotificationManager.ChechIfNotificationShouldBeSend())
+    {
+        this.emailNotificationManager.SendReport();
+    }
     }
 
     private void SaveConfiguration() {
@@ -925,5 +931,9 @@ namespace OpenHardwareMonitor.GUI {
             notificationForm.ShowDialog();
     }
 
+        private void log10sMenuItem_Click(object sender, EventArgs e)
+        {
+           
+        }
     }
 }

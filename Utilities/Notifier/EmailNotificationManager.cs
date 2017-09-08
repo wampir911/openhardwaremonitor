@@ -30,11 +30,10 @@ namespace OpenHardwareMonitor.Utilities.Notifier
         }                  
 
         public bool SendReport()
-        {
-            // var GPUHardwares = computer.Hardware.ToList().Where(x => x.HardwareType == HardwareType.GpuNvidia || x.HardwareType == HardwareType.GpuAti).ToList();
-
+        {            
             var notificationReport = this.PrepareNotificationReport();                
-
+            
+            // tu wysyłanie 
             return true;           
         }
 
@@ -49,22 +48,43 @@ namespace OpenHardwareMonitor.Utilities.Notifier
 
             sb.AppendLine(Environment.MachineName);
             sb.AppendLine(Environment.OSVersion.ToString());
+            sb.AppendLine();
 
-            // zrobić aby odpowienie rzeczy były brane do raportu bo teraz wchodzi cały hardware a nie tylko GPU
-
-            foreach (var hardware in computer.Hardware.ToList())
+            foreach (var hardware in computer.Hardware.Where(x => x.HardwareType == HardwareType.CPU).ToList())
             {
                 sb.Append(hardware.Name);
-                sb.AppendFormat(" - CORE : {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Clock && x.DefaultName == "GPU Core")));
-                sb.AppendFormat(" , Load : {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Load && x.DefaultName == "GPU Core")));
-                sb.AppendFormat(" TEMP : {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Temperature)));
-                sb.AppendFormat(" , FAN : {0} ({1})",
+                sb.AppendFormat(" - CORE: {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Clock)));
+                sb.AppendFormat(" , Load: {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Load && x.DefaultName == "CPU Total")));
+                sb.AppendFormat(" TEMP: {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Temperature)));
+
+                sb.AppendLine();
+            }
+
+            sb.AppendLine();
+
+            foreach (var hardware in computer.Hardware.Where(x => x.HardwareType == HardwareType.GpuNvidia || x.HardwareType == HardwareType.GpuAti).ToList())
+            {
+                sb.Append(hardware.Name);
+                sb.AppendFormat(" - CORE: {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Clock && x.DefaultName == "GPU Core")));
+                sb.AppendFormat(" , Load: {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Load && x.DefaultName == "GPU Core")));
+                sb.AppendFormat(" TEMP: {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Temperature)));
+                sb.AppendFormat(" , FAN: {0} ({1})",
                     sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Control)),
                     sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Fan)));
 
-                sb.AppendFormat(" MEMORY : {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Clock && x.DefaultName == "GPU Memory")));
+                sb.AppendFormat(" MEMORY: {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Clock && x.DefaultName == "GPU Memory")));
 
                 sb.AppendLine();
+            }
+
+            sb.AppendLine();
+
+            foreach (var hardware in computer.Hardware.Where(x => x.HardwareType == HardwareType.RAM).ToList())
+            {
+                sb.Append(hardware.Name);               
+                sb.AppendFormat(" - USED: {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Data && x.DefaultName == "Used Memory")));
+                sb.AppendFormat(" AVAILABLE: {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Data && x.DefaultName == "Available Memory")));
+                sb.AppendFormat(" LOAD: {0}", sensorTextManager.ValueToString(hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Load)));
             }
 
             return sb.ToString();

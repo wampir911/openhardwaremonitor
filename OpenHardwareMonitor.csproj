@@ -136,7 +136,10 @@
     <Compile Include="Utilities\Logger.cs" />
     <Compile Include="Utilities\Notifier\CheckerBase.cs" />
     <Compile Include="Utilities\Notifier\EmailNotificationManager.cs" />
+    <Compile Include="Utilities\Notifier\CPULoadChecker.cs" />
+    <Compile Include="Utilities\Notifier\MemoryUsageChecker.cs" />
     <Compile Include="Utilities\Notifier\GPULoadChecker.cs" />
+    <Compile Include="Utilities\Notifier\CPUTemperatureChecker.cs" />
     <Compile Include="Utilities\Notifier\GPUTemperatureChecker.cs" />
     <Compile Include="Utilities\Notifier\IChecker.cs" />
     <Compile Include="Utilities\PersistentSettings.cs" />

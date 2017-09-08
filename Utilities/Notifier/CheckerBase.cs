@@ -7,16 +7,29 @@ namespace OpenHardwareMonitor.Utilities.Notifier
 {
     public abstract class CheckerBase
     {
+        protected bool muteChecking;
+
         protected bool CheckValue(float? value, int grateLessSign, float threshold)
         {
+            bool checkedValue = false;          
+
             switch (grateLessSign)
             {
-                case 0: return false;
-                case 1: return (threshold == -1) ? false : this.CheckGraterThan(value, threshold);
-                case 2: return (threshold == -1) ? false : this.CheckLessThan(value, threshold);
+                case 0: checkedValue = false; break;
+                case 1: checkedValue = (threshold == -1) ? false : this.CheckGraterThan(value, threshold); break;
+                case 2: checkedValue = (threshold == -1) ? false : this.CheckLessThan(value, threshold); break;
             }
 
-            return false;
+            // do not send the same notification over and over again.
+            if (muteChecking && checkedValue)
+            {
+                return false;
+            }
+            else
+            {
+                muteChecking = checkedValue;
+                return checkedValue;
+            }            
         }
 
         private bool CheckGraterThan(float? sensorValue, float thresholdValue)

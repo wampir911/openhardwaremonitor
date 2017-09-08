@@ -6,7 +6,7 @@ using System.Text;
 namespace OpenHardwareMonitor.Utilities.Notifier
 {
     public interface IChecker
-    {
+    {        
         bool Check();
     }
 }

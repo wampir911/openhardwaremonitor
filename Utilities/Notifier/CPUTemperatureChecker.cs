@@ -6,12 +6,12 @@ using System.Text;
 
 namespace OpenHardwareMonitor.Utilities.Notifier
 {
-    public class GPULoadChecker : CheckerBase, IChecker
+    class CPUTemperatureChecker : CheckerBase, IChecker
     {
         private PersistentSettings settings;
         private IComputer computer;
 
-        public GPULoadChecker(PersistentSettings settings, IComputer computer)
+        public CPUTemperatureChecker(PersistentSettings settings, IComputer computer)
         {
             this.settings = settings;
             this.computer = computer;
@@ -21,7 +21,7 @@ namespace OpenHardwareMonitor.Utilities.Notifier
         {
             get
             {
-                return new Identifier("notification", "GpuLoadThreshold");
+                return new Identifier("notification", "CpuTemperatureThreshold");
             }
         }
 
@@ -29,7 +29,7 @@ namespace OpenHardwareMonitor.Utilities.Notifier
         {
             get
             {
-                return new Identifier("notification", "graterLessSignGPULoad");
+                return new Identifier("notification", "graterLessSignCPUTemperature");
             }
         }
 
@@ -39,15 +39,15 @@ namespace OpenHardwareMonitor.Utilities.Notifier
         /// <returns>true if condition is positive for one of the gpu.</returns>
         public bool Check()
         {
-            foreach (var hardware in computer.Hardware.Where(x => x.HardwareType == HardwareType.GpuNvidia || x.HardwareType == HardwareType.GpuAti).ToList())
+            foreach (var hardware in computer.Hardware.Where(x => x.HardwareType == HardwareType.CPU).ToList())
             {
-                ISensor gpuLoadSensor = hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Load && x.DefaultName == "GPU Core");
-                if (gpuLoadSensor != null)
+                ISensor cpuTemperatureSensor = hardware.Sensors.FirstOrDefault(x => x.SensorType == SensorType.Temperature);
+                if (cpuTemperatureSensor != null)
                 {
-                    var graterLessSignGPULoad = settings.GetValue(GraterLessSignIdentifier.ToString(), 0);
-                    var gpuLoadThreshold = settings.GetValue(ThresholdIdentifier.ToString(), -1);
+                    var graterLessSignCPUTemperature = settings.GetValue(GraterLessSignIdentifier.ToString(), 0);
+                    var cpuTemperatureThreshold = settings.GetValue(ThresholdIdentifier.ToString(), -1);
 
-                    if (base.CheckValue(gpuLoadSensor.Value, graterLessSignGPULoad, gpuLoadThreshold))
+                    if (base.CheckValue(cpuTemperatureSensor.Value, graterLessSignCPUTemperature, cpuTemperatureThreshold))
                     {
                         return true;
                     }
@@ -56,5 +56,5 @@ namespace OpenHardwareMonitor.Utilities.Notifier
 
             return false;
         }
-    }
+    } 
 }

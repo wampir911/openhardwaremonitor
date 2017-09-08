@@ -14,11 +14,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using OpenHardwareMonitor.Hardware;
+using OpenHardwareMonitor.Utilities.Notifier;
 
 namespace OpenHardwareMonitor.Utilities {
   public class Logger {
+        
 
-    private const string fileNameFormat = 
+  private const string fileNameFormat = 
       "OpenHardwareMonitorLog-{0:yyyy-MM-dd}.csv";
 
     private readonly IComputer computer;
@@ -33,7 +35,7 @@ namespace OpenHardwareMonitor.Utilities {
     public Logger(IComputer computer) {
       this.computer = computer;
       this.computer.HardwareAdded += HardwareAdded;
-      this.computer.HardwareRemoved += HardwareRemoved;      
+      this.computer.HardwareRemoved += HardwareRemoved;
     }
 
     private void HardwareRemoved(IHardware hardware) {
@@ -158,7 +160,8 @@ namespace OpenHardwareMonitor.Utilities {
 
         if (!OpenExistingLogFile())
           CreateNewLogFile();
-      }
+
+            }
 
       try {
         using (StreamWriter writer = new StreamWriter(new FileStream(fileName,

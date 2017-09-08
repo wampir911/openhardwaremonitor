@@ -104,6 +104,8 @@ namespace OpenHardwareMonitor.GUI {
             this.webMenuItem = new System.Windows.Forms.MenuItem();
             this.runWebServerMenuItem = new System.Windows.Forms.MenuItem();
             this.serverPortMenuItem = new System.Windows.Forms.MenuItem();
+            this.menuItem4 = new System.Windows.Forms.MenuItem();
+            this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.helpMenuItem = new System.Windows.Forms.MenuItem();
             this.aboutMenuItem = new System.Windows.Forms.MenuItem();
             this.treeContextMenu = new System.Windows.Forms.ContextMenu();
@@ -111,8 +113,6 @@ namespace OpenHardwareMonitor.GUI {
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.splitContainer = new OpenHardwareMonitor.GUI.SplitContainerAdv();
             this.treeView = new Aga.Controls.Tree.TreeViewAdv();
-            this.menuItem4 = new System.Windows.Forms.MenuItem();
-            this.menuItem7 = new System.Windows.Forms.MenuItem();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.SuspendLayout();
             this.SuspendLayout();
@@ -507,6 +507,7 @@ namespace OpenHardwareMonitor.GUI {
             this.log10sMenuItem.Index = 3;
             this.log10sMenuItem.RadioCheck = true;
             this.log10sMenuItem.Text = "10s";
+            this.log10sMenuItem.Click += new System.EventHandler(this.log10sMenuItem_Click);
             // 
             // log30sMenuItem
             // 
@@ -586,6 +587,17 @@ namespace OpenHardwareMonitor.GUI {
             this.serverPortMenuItem.Text = "Port";
             this.serverPortMenuItem.Click += new System.EventHandler(this.serverPortMenuItem_Click);
             // 
+            // menuItem4
+            // 
+            this.menuItem4.Index = 12;
+            this.menuItem4.Text = "-";
+            // 
+            // menuItem7
+            // 
+            this.menuItem7.Index = 13;
+            this.menuItem7.Text = "Notifications";
+            this.menuItem7.Click += new System.EventHandler(this.menuItem7_Click);
+            // 
             // helpMenuItem
             // 
             this.helpMenuItem.Index = 3;
@@ -609,7 +621,7 @@ namespace OpenHardwareMonitor.GUI {
             // 
             // timer
             // 
-            this.timer.Interval = 1000;
+            this.timer.Interval = 10000;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // splitContainer
@@ -666,17 +678,6 @@ namespace OpenHardwareMonitor.GUI {
             this.treeView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeView_MouseDown);
             this.treeView.MouseMove += new System.Windows.Forms.MouseEventHandler(this.treeView_MouseMove);
             this.treeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeView_MouseUp);
-            // 
-            // menuItem4
-            // 
-            this.menuItem4.Index = 12;
-            this.menuItem4.Text = "-";
-            // 
-            // menuItem7
-            // 
-            this.menuItem7.Index = 13;
-            this.menuItem7.Text = "Notifications";
-            this.menuItem7.Click += new System.EventHandler(this.menuItem7_Click);
             // 
             // MainForm
             // 
