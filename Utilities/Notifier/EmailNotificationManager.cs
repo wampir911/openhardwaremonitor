@@ -1,8 +1,12 @@
 ﻿using OpenHardwareMonitor.Hardware;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
+using System.Windows.Forms;
 
 namespace OpenHardwareMonitor.Utilities.Notifier
 {
@@ -30,16 +34,48 @@ namespace OpenHardwareMonitor.Utilities.Notifier
         }                  
 
         public bool SendReport()
-        {            
-            var notificationReport = this.PrepareNotificationReport();                
-            
-            // tu wysyłanie 
+        {
+            using (SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587))
+            {
+
+                smtpClient.UseDefaultCredentials = false;
+                smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtpClient.Credentials = new NetworkCredential("opernhardwareemailnotifier@gmail.com", ConfigurationSettings.AppSettings.Get("EmailPassword"));
+                smtpClient.EnableSsl = true;
+                MailMessage mail = new MailMessage();
+
+                //Setting From , To and CC
+                mail.From = new MailAddress("opernhardwareemailnotifier@gmail.com");
+                mail.To.Add(new MailAddress(settings.GetValue(EmailIdentifier.ToString(), "")));
+                mail.Body = this.PrepareNotificationReport();
+                mail.Subject = "Open hardware monitor email notification.";
+
+                try
+                {
+                    smtpClient.Send(mail);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error during sending email notification");
+                }
+            }
+
             return true;           
         }
 
         public bool ChechIfNotificationShouldBeSend()
         {
+            if (!this.ValidateSettings()) return false;
+
             return checkers.ToList().Any(x => x.Check());            
+        }
+
+        private bool ValidateSettings()
+        {
+            if (String.IsNullOrWhiteSpace(ConfigurationSettings.AppSettings.Get("EmailPassword")) ||
+                String.IsNullOrWhiteSpace(settings.GetValue(EmailIdentifier.ToString(), ""))) return false;
+
+            return true;
         }
 
         private string PrepareNotificationReport()

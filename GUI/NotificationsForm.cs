@@ -23,8 +23,12 @@ namespace OpenHardwareMonitor.GUI
 
         private void SetControlsBehavior()
         {
-            GPULoadNumUpDown.Enabled = GPULoadDDL.SelectedIndex > 0;
-            GPUTemperatureNumUpDown.Enabled = GPUTemperatureDDL.SelectedIndex > 0;
+            //todo: add disabling functionality
+
+            //GPULoadNumUpDown.Enabled = GPULoadDDL.SelectedIndex > 0;
+            //GPUTemperatureNumUpDown.Enabled = GPUTemperatureDDL.SelectedIndex > 0;
+            //CPULoadNumUpDown.Enabled = CPULoadDDL.SelectedIndex > 0;
+            //CPUTemperatureNumUpDown.Enabled = CPUTemperatureDDL.SelectedIndex > 0;
         }
 
         private void GPULoadTxtBox_KeyPress(object sender, KeyPressEventArgs e)
