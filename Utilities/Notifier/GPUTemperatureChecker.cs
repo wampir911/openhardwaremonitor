@@ -47,7 +47,7 @@ namespace OpenHardwareMonitor.Utilities.Notifier
                     var graterLessSignGPUTemperature = settings.GetValue(GraterLessSignIdentifier.ToString(), 0);
                     var gpuTemperatureThreshold = settings.GetValue(ThresholdIdentifier.ToString(), -1);
 
-                    if (base.CheckValue(gpuTemperatureSensor.Value, graterLessSignGPUTemperature, gpuTemperatureThreshold))
+                    if (base.CheckValue(gpuTemperatureSensor, graterLessSignGPUTemperature, gpuTemperatureThreshold))
                     {
                         return true;
                     }

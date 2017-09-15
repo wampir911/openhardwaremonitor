@@ -46,13 +46,13 @@ namespace OpenHardwareMonitor.Utilities.Notifier
 
                 //Setting From , To and CC
                 mail.From = new MailAddress("opernhardwareemailnotifier@gmail.com");
-                mail.To.Add(new MailAddress(settings.GetValue(EmailIdentifier.ToString(), "")));
+                mail.To.Add(new MailAddress(settings.GetValue(EmailIdentifier.ToString(),"")));
                 mail.Body = this.PrepareNotificationReport();
-                mail.Subject = "Open hardware monitor email notification.";
+                mail.Subject = this.GetSubject();
 
                 try
                 {
-                    smtpClient.Send(mail);
+                  smtpClient.Send(mail);
                 }
                 catch (Exception ex)
                 {
@@ -67,7 +67,7 @@ namespace OpenHardwareMonitor.Utilities.Notifier
         {
             if (!this.ValidateSettings()) return false;
 
-            return checkers.ToList().Any(x => x.Check());            
+            return this.checkers.ToList().Any(x => x.Check());            
         }
 
         private bool ValidateSettings()
@@ -76,6 +76,16 @@ namespace OpenHardwareMonitor.Utilities.Notifier
                 String.IsNullOrWhiteSpace(settings.GetValue(EmailIdentifier.ToString(), ""))) return false;
 
             return true;
+        }
+
+        private string GetSubject()
+        {
+            if (computer.Hardware.SelectMany(x => x.Sensors).Any(s => s.NotificationStatus == NotificationStatus.Error))
+            {
+                return "ERROR: Open hardware monitor email notification.";
+            }
+
+            return "OK: Open hardware monitor email notification.";
         }
 
         private string PrepareNotificationReport()

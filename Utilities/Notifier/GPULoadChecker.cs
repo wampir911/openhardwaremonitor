@@ -47,7 +47,7 @@ namespace OpenHardwareMonitor.Utilities.Notifier
                     var graterLessSignGPULoad = settings.GetValue(GraterLessSignIdentifier.ToString(), 0);
                     var gpuLoadThreshold = settings.GetValue(ThresholdIdentifier.ToString(), -1);
 
-                    if (base.CheckValue(gpuLoadSensor.Value, graterLessSignGPULoad, gpuLoadThreshold))
+                    if (base.CheckValue(gpuLoadSensor, graterLessSignGPULoad, gpuLoadThreshold))
                     {
                         return true;
                     }

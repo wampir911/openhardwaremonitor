@@ -47,7 +47,7 @@ namespace OpenHardwareMonitor.Utilities.Notifier
                     var graterLessSignCPUTemperature = settings.GetValue(GraterLessSignIdentifier.ToString(), 0);
                     var cpuTemperatureThreshold = settings.GetValue(ThresholdIdentifier.ToString(), -1);
 
-                    if (base.CheckValue(cpuTemperatureSensor.Value, graterLessSignCPUTemperature, cpuTemperatureThreshold))
+                    if (base.CheckValue(cpuTemperatureSensor, graterLessSignCPUTemperature, cpuTemperatureThreshold))
                     {
                         return true;
                     }

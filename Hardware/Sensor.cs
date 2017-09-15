@@ -72,8 +72,7 @@ namespace OpenHardwareMonitor.Hardware {
         SetSensorValuesToSettings();
       };
     }
-
-    private void SetSensorValuesToSettings() {
+      private void SetSensorValuesToSettings() {
       using (MemoryStream m = new MemoryStream()) {
         using (GZipStream c = new GZipStream(m, CompressionMode.Compress))
         using (BufferedStream b = new BufferedStream(c, 65536))
@@ -133,11 +132,24 @@ namespace OpenHardwareMonitor.Hardware {
       values.Append(new SensorValue(value, time));
     }
 
-    public IHardware Hardware {
+      public NotificationStatus NotificationStatus { get; private set; }
+      public IHardware Hardware {
       get { return hardware; }
     }
 
-    public SensorType SensorType {
+
+        public void SetNotificationErrorStatus(bool isError)
+        {
+            if (isError)
+            {
+                this.NotificationStatus = NotificationStatus.Error;
+            }
+            else
+            {
+                this.NotificationStatus = this.NotificationStatus == NotificationStatus.Error ? NotificationStatus.Fixed : NotificationStatus.Normal;
+            }
+        }
+        public SensorType SensorType {
       get { return sensorType; }
     }
 

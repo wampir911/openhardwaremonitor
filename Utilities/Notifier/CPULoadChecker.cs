@@ -47,7 +47,7 @@ namespace OpenHardwareMonitor.Utilities.Notifier
                     var graterLessSignCPULoad = settings.GetValue(GraterLessSignIdentifier.ToString(), 0);
                     var cpuLoadThreshold = settings.GetValue(ThresholdIdentifier.ToString(), -1);
 
-                    if (base.CheckValue(cpuLoadSensor.Value, graterLessSignCPULoad, cpuLoadThreshold))
+                    if (base.CheckValue(cpuLoadSensor, graterLessSignCPULoad, cpuLoadThreshold))
                     {
                         return true;
                     }

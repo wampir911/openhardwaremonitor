@@ -7,39 +7,46 @@ namespace OpenHardwareMonitor.Utilities.Notifier
 {
     public abstract class CheckerBase
     {
-        protected bool muteChecking;
-
-        protected bool CheckValue(float? value, int grateLessSign, float threshold)
+        protected bool CheckValue(ISensor sensor, int grateLessSign, float threshold)
         {
+            if (sensor == null)
+            {
+                throw new ArgumentNullException(nameof(sensor));
+            }
+
             bool checkedValue = false;          
 
             switch (grateLessSign)
             {
-                case 0: checkedValue = false; break;
-                case 1: checkedValue = (threshold == -1) ? false : this.CheckGraterThan(value, threshold); break;
-                case 2: checkedValue = (threshold == -1) ? false : this.CheckLessThan(value, threshold); break;
+                case 0: break;
+                case 1: checkedValue = (threshold == -1) ? false : this.CheckGraterThan(sensor.Value, threshold); break;
+                case 2: checkedValue = (threshold == -1) ? false : this.CheckLessThan(sensor.Value, threshold); break;
             }
 
             // do not send the same notification over and over again.
-            if (muteChecking && checkedValue)
+            if (sensor.NotificationStatus == NotificationStatus.Error && checkedValue)
             {
                 return false;
             }
-            else
+
+            sensor.SetNotificationErrorStatus(checkedValue);
+
+            if (sensor.NotificationStatus == NotificationStatus.Fixed)
             {
-                muteChecking = checkedValue;
-                return checkedValue;
-            }            
+                return true;
+            }
+
+            return checkedValue;
         }
 
         private bool CheckGraterThan(float? sensorValue, float thresholdValue)
         {
-            return (sensorValue == null) ? false : sensorValue > thresholdValue;
+            return (sensorValue != null) && sensorValue > thresholdValue;
         }
 
         private bool CheckLessThan(float? sensorValue, float thresholdValue)
         {
-            return (sensorValue == null) ? false : sensorValue < thresholdValue;
+            return (sensorValue != null) && sensorValue < thresholdValue;
         }
     }
 }

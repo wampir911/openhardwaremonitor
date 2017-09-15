@@ -44,7 +44,7 @@ namespace OpenHardwareMonitor.Utilities.Notifier
                     var graterLessSignMemoryUsage = settings.GetValue(GraterLessSignIdentifier.ToString(), 0);
                     var memoryUsageThreshold = settings.GetValue(ThresholdIdentifier.ToString(), -1);
 
-                    if (base.CheckValue(memoryUsageSensor.Value, graterLessSignMemoryUsage, memoryUsageThreshold))
+                    if (base.CheckValue(memoryUsageSensor, graterLessSignMemoryUsage, memoryUsageThreshold))
                     {
                         return true;
                     }

@@ -44,6 +44,8 @@ namespace OpenHardwareMonitor.Hardware {
 
   public interface ISensor : IElement {
 
+    NotificationStatus NotificationStatus { get; }
+
     IHardware Hardware { get; }
 
     SensorType SensorType { get; }
@@ -64,6 +66,7 @@ namespace OpenHardwareMonitor.Hardware {
     void ResetMin();
     void ResetMax();
 
+    void SetNotificationErrorStatus(bool isError);
     IEnumerable<SensorValue> Values { get; }
 
     IControl Control { get; }
